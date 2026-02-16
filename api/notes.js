@@ -1,14 +1,13 @@
 const crypto = require('crypto');
 
-// In-memory storage (note: this resets on serverless function cold starts)
-// For production, consider using a database orKV store like Redis/Vercel KV
+// In-memory storage
 const sharedNotes = new Map();
 
 function generateId() {
   return crypto.randomBytes(4).toString('hex');
 }
 
-module.exports = (req, res) => {
+module.exports = async function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
@@ -22,7 +21,11 @@ module.exports = (req, res) => {
 
   // POST /api/notes - Create a new shared note
   if (method === 'POST' && url === '/api/notes') {
-    const { content, title } = req.body;
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    await new Promise(resolve => req.on('end', resolve));
+    
+    const { content, title } = JSON.parse(body || '{}');
     
     if (!content) {
       return res.status(400).json({ error: 'Content is required' });
