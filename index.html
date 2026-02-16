@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOTEPAD</title>
+  <style>
+    /* Theme Variables - Light with Yellow */
+    :root {
+      --bg-color: #FFFFF0;
+      --text-color: #000000;
+      --border-color: #DAA520;
+      --accent-color: #FFFACD;
+      --button-bg: #FFFACD;
+      --button-text: #000000;
+      --button-border: #DAA520;
+      --button-hover-bg: #FFD700;
+      --button-hover-text: #000000;
+      --header-bg: #FFD700;
+      --header-text: #000000;
+      --status-bg: #FFD700;
+      --status-text: #000000;
+      --link-color: #8B4513;
+      --visited-color: #A0522D;
+    }
+
+    /* Dark Theme - Black and Grey */
+    [data-theme="dark"] {
+      --bg-color: #0a0a0a;
+      --text-color: #CCCCCC;
+      --border-color: #666666;
+      --accent-color: #333333;
+      --button-bg: #1a1a1a;
+      --button-text: #CCCCCC;
+      --button-border: #666666;
+      --button-hover-bg: #666666;
+      --button-hover-text: #000;
+      --header-bg: #333333;
+      --header-text: #FFF;
+      --status-bg: #333333;
+      --status-text: #FFF;
+      --link-color: #999999;
+      --visited-color: #666666;
+    }
+
+    /* Eclipse Theme */
+    [data-theme="eclipse"] {
+      --bg-color: #1E1E1E;
+      --text-color: #D4D4D4;
+      --border-color: #3C3C3C;
+      --accent-color: #252526;
+      --button-bg: #3C3C3C;
+      --button-text: #D4D4D4;
+      --button-border: #3C3C3C;
+      --button-hover-bg: #007ACC;
+      --button-hover-text: #FFF;
+      --header-bg: #007ACC;
+      --header-text: #FFF;
+      --status-bg: #007ACC;
+      --status-text: #FFF;
+      --link-color: #3794FF;
+      --visited-color: #9B7DDC;
+    }
+
+    /* Monokai Theme */
+    [data-theme="saturn"] {
+      --bg-color: #272822;
+      --text-color: #F8F8F2;
+      --border-color: #49483E;
+      --accent-color: #3E3D32;
+      --button-bg: #3E3D32;
+      --button-text: #F8F8F2;
+      --button-border: #49483E;
+      --button-hover-bg: #F92672;
+      --button-hover-text: #FFF;
+      --header-bg: #F92672;
+      --header-text: #FFF;
+      --status-bg: #F92672;
+      --status-text: #FFF;
+      --link-color: #66D9EF;
+      --visited-color: #AE81FF;
+    }
+
+    /* Midnight Theme */
+    [data-theme="midnight"] {
+      --bg-color: #0D1B2A;
+      --text-color: #E0E1DD;
+      --border-color: #415A77;
+      --accent-color: #1B263B;
+      --button-bg: #0D1B2A;
+      --button-text: #E0E1DD;
+      --button-border: #415A77;
+      --button-hover-bg: #415A77;
+      --button-hover-text: #0D1B2A;
+      --header-bg: #415A77;
+      --header-text: #0D1B2A;
+      --status-bg: #415A77;
+      --status-text: #0D1B2A;
+      --link-color: #778DA9;
+      --visited-color: #4B5D70;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    a {
+      color: var(--link-color);
+      text-decoration: underline;
+    }
+    a:visited {
+      color: var(--visited-color);
+    }
+    a:hover {
+      background: var(--button-hover-bg);
+      color: var(--button-hover-text);
+    }
+    hr {
+      border: none;
+      border-top: 2px solid var(--border-color);
+      margin: 20px 0;
+    }
+    button {
+      background: var(--button-bg);
+      color: var(--button-text);
+      border: 2px solid var(--button-border);
+      padding: 8px 16px;
+      font-family: 'Courier New', Courier, monospace;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background: var(--button-hover-bg);
+      color: var(--button-hover-text);
+    }
+    input, textarea {
+      background: var(--bg-color);
+      color: var(--text-color);
+      border: 2px solid var(--border-color);
+      padding: 8px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+    }
+    input:focus, textarea:focus {
+      outline: 2px solid var(--border-color);
+      outline-offset: 2px;
+    }
+
+    /* Header */
+    header {
+      margin-bottom: 20px;
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .logo {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 10px;
+    }
+    .theme-selector {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+    .theme-selector label {
+      font-size: 12px;
+    }
+    .theme-selector select {
+      background: var(--button-bg);
+      color: var(--button-text);
+      border: 2px solid var(--button-border);
+      padding: 5px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+    }
+
+    /* Navigation */
+    nav {
+      padding: 10px 0;
+    }
+    nav a {
+      margin-right: 10px;
+    }
+
+    /* Main Layout */
+    .main-container {
+      display: flex;
+      gap: 20px;
+    }
+    .sidebar {
+      width: 250px;
+      border: 2px solid var(--border-color);
+      padding: 10px;
+      min-height: 500px;
+    }
+    .editor-area {
+      flex: 1;
+      border: 2px solid var(--border-color);
+      padding: 10px;
+      min-height: 500px;
+    }
+
+    /* Sidebar */
+    .sidebar h3 {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 5px 10px;
+      margin: -10px -10px 10px -10px;
+    }
+    .folder-section, .file-section {
+      margin-bottom: 20px;
+    }
+    .item-list {
+      list-style: none;
+      padding: 0;
+    }
+    .item-list li {
+      padding: 5px 0;
+      cursor: pointer;
+    }
+    .item-list li:hover {
+      background: var(--accent-color);
+    }
+    .item-list li.active {
+      background: var(--button-hover-bg);
+      color: var(--button-hover-text);
+    }
+    .item-list li .delete-btn {
+      cursor: pointer;
+      color: var(--text-color);
+      font-weight: bold;
+      margin-left: 10px;
+      opacity: 0.5;
+    }
+    .item-list li .delete-btn:hover {
+      opacity: 1;
+    }
+
+    /* New item input */
+    .new-item-input {
+      display: flex;
+      gap: 5px;
+      margin-top: 10px;
+    }
+    .new-item-input input {
+      flex: 1;
+      padding: 5px;
+    }
+
+    /* Toolbar */
+    .toolbar {
+      background: var(--bg-color);
+      padding: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      border-bottom: 2px solid var(--border-color);
+    }
+    .toolbar button {
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+    .toolbar button.active {
+      background: var(--button-hover-bg);
+      color: var(--button-hover-text);
+    }
+
+    /* Editor */
+    #editor {
+      width: 100%;
+      min-height: 350px;
+      border: none;
+      padding: 10px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      resize: none;
+      outline: none;
+      background: var(--bg-color);
+      color: var(--text-color);
+    }
+    #editor:empty:before {
+      content: 'Start typing...';
+      opacity: 0.5;
+    }
+
+    /* Title input */
+    .title-input {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .breadcrumb a {
+      color: var(--link-color);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .breadcrumb a:hover {
+      background: var(--button-hover-bg);
+      color: var(--button-hover-text);
+    }
+    .breadcrumb-item {
+      cursor: pointer;
+      color: var(--link-color);
+    }
+    .breadcrumb-item:hover {
+      background: var(--button-hover-bg);
+      color: var(--button-hover-text);
+    }
+
+    /* Status bar */
+    .status-bar {
+      background: var(--status-bg);
+      color: var(--status-text);
+      padding: 5px 10px;
+      margin-top: 10px;
+      font-size: 12px;
+    }
+
+    /* Share modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+    }
+    .modal.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background: var(--bg-color);
+      border: 2px solid var(--border-color);
+      padding: 20px;
+      max-width: 500px;
+      width: 90%;
+    }
+    .modal h3 {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 10px;
+      margin: -20px -20px 20px -20px;
+    }
+    .share-links {
+      margin: 20px 0;
+    }
+    .share-links input {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    /* Help page */
+    .help-content {
+      max-width: 800px;
+    }
+    .help-content h2 {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 10px;
+      margin: 20px 0 10px 0;
+    }
+    .help-content pre {
+      background: var(--accent-color);
+      padding: 10px;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+    }
+    .help-content ul {
+      list-style: none;
+      padding-left: 20px;
+    }
+    .help-content li:before {
+      content: '> ';
+    }
+
+    /* Formatting styles in editor */
+    .bold { font-weight: bold; }
+    .italic { font-style: italic; }
+    .strike { text-decoration: line-through; }
+    .underline-dotted {
+      border-bottom: 2px dotted var(--text-color);
+    }
+
+    @media (max-width: 768px) {
+      .main-container {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        min-height: auto;
+      }
+      .header-top {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+  <header>
+    <div class="header-top">
+      <div class="logo">
+        <p>=== NOTEPAD ===</p>
+      </div>
+      <div class="theme-selector">
+        <label>THEME:</label>
+        <select id="theme-select" onchange="changeTheme(this.value)">
+          <option value="dark">DARK</option>
+          <option value="light">LIGHT</option>
+          <option value="eclipse">ECLIPSE</option>
+          <option value="saturn">MONOKAI</option>
+          <option value="midnight">MIDNIGHT</option>
+        </select>
+      </div>
+    </div>
+    <nav>
+      <a href="#" onclick="showSection('files')">[FILES]</a> | 
+      <a href="#" onclick="showSection('help')">[HELP]</a>
+    </nav>
+    <hr>
+  </header>
+
+  <!-- Main App Section -->
+  <div id="files-section" class="main-container">
+    <aside class="sidebar">
+      <!-- Folders -->
+      <div class="folder-section">
+        <h3>=== FOLDERS ===</h3>
+        <ul id="folder-list" class="item-list">
+          <li data-id="default">[DEFAULT]</li>
+        </ul>
+        <div class="new-item-input">
+          <input type="text" id="new-folder-name" placeholder="Folder name...">
+          <button onclick="createFolder()">+</button>
+        </div>
+      </div>
+
+      <!-- Files -->
+      <div class="file-section">
+        <h3>=== FILES ===</h3>
+        <ul id="file-list" class="item-list"></ul>
+        <div class="new-item-input">
+          <input type="text" id="new-file-name" placeholder="File name...">
+          <button onclick="createFile()">+</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="editor-area">
+      <!-- Breadcrumb -->
+      <div class="breadcrumb" id="breadcrumb">
+        HOME > DEFAULT
+      </div>
+      
+      <input type="text" id="note-title" class="title-input" placeholder="Note Title" value="Untitled">
+      
+      <div class="toolbar">
+        <button onclick="formatText('bold')" title="Bold (Ctrl+B)">B</button>
+        <button onclick="formatText('italic')" title="Italic (Ctrl+I)"><i>I</i></button>
+        <button onclick="formatText('strike')" title="Strikethrough"><s>S</s></button>
+        <button onclick="formatText('underline')" title="Dotted Underline"><u>U</u></button>
+        <span>|</span>
+        <button onclick="saveNote()" title="Save Note">SAVE</button>
+        <button onclick="deleteNote()" title="Delete Note">DELETE</button>
+        <span>|</span>
+        <button onclick="showShareModal()" title="Share Note">SHARE</button>
+        <button onclick="newNote()" title="New Note">NEW</button>
+      </div>
+
+      <div id="editor" contenteditable="true" oninput="onEditorChange()"></div>
+
+      <div class="status-bar">
+        <span id="status">READY</span> | 
+        <span id="char-count">0 chars</span> | 
+        <span id="last-saved"></span>
+      </div>
+    </main>
+  </div>
+
+  <!-- Help Section -->
+  <div id="help-section" class="help-content" style="display: none;">
+    <h1>=== NOTEPAD HELP ===</h1>
+    
+    <h2>OVERVIEW</h2>
+    <p>
+      Welcome to the Notepad - a minimalist note-taking application.
+      All your notes are stored locally in your browser and persist between sessions.
+    </p>
+
+    <h2>KEYBOARD SHORTCUTS</h2>
+    <ul>
+      <li>Ctrl+B - <strong>Bold</strong> text</li>
+      <li>Ctrl+I - <em>Italic</em> text</li>
+      <li>Ctrl+S - Save note</li>
+    </ul>
+
+    <h2>TEXT FORMATTING</h2>
+    <ul>
+      <li><strong>B</strong> - Make selected text bold</li>
+      <li><strong>I</strong> - Make selected text italic</li>
+      <li><strong>S</strong> - Strikethrough text</li>
+      <li><strong>U</strong> - Add dotted underline</li>
+    </ul>
+
+    <h2>FILES AND FOLDERS</h2>
+    <pre>
+    1. Create folders to organize your notes
+    2. Create files inside folders
+    3. Click on a file to open it
+    4. Use delete button (X) to remove items
+    5. All changes are saved automatically
+    </pre>
+
+    <h2>THEMES</h2>
+    <pre>
+    Select from 5 themes:
+    - LIGHT   - White and yellow
+    - DARK    - Black and grey
+    - ECLIPSE - IDE-style dark theme
+    - MONOKAI - Classic syntax highlighting colors
+    - MIDNIGHT - Deep blue oceanic
+    </pre>
+
+    <h2>SHARING NOTES</h2>
+    <pre>
+    1. Click [SHARE] to generate a shareable link
+    2. The link format: /s/[code]
+    3. Share via browser or copy the API URL
+    4. Anyone with the link can view your note
+    
+    CURL ACCESS:
+    $ curl http://localhost:3000/api/notes/[code]
+    </pre>
+
+    <h2>LOCAL STORAGE</h2>
+    <pre>
+    Your notes are stored in browser localStorage.
+    Data persists between browser sessions.
+    No account or login required.
+    </pre>
+
+    <hr>
+    <p>
+      <a href="#" onclick="showSection('files')">[RETURN TO NOTEPAD]</a>
+    </p>
+  </div>
+
+  <!-- Share Modal -->
+  <div id="share-modal" class="modal">
+    <div class="modal-content">
+      <h3>=== SHARE NOTE ===</h3>
+      <p>Your note has been saved for sharing:</p>
+      <div class="share-links">
+        <label>Browser Link:</label>
+        <input type="text" id="share-url" readonly>
+        <label>API Link (for curl):</label>
+        <input type="text" id="api-url" readonly>
+      </div>
+      <button onclick="closeShareModal()">CLOSE</button>
+      <button onclick="copyShareUrl()">COPY URL</button>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'brutalist-notepad';
+    const THEME_KEY = 'notepad-theme';
+
+    // ==================== THEME MANAGEMENT ====================
+    function changeTheme(theme) {
+      document.body.setAttribute('data-theme', theme);
+      localStorage.setItem(THEME_KEY, theme);
+    }
+
+    function loadTheme() {
+      const savedTheme = localStorage.getItem(THEME_KEY);
+      if (savedTheme) {
+        document.getElementById('theme-select').value = savedTheme;
+        document.body.setAttribute('data-theme', savedTheme);
+      }
+    }
+
+    // ==================== DATA MANAGEMENT ====================
+    function getData() {
+      const data = localStorage.getItem(STORAGE_KEY);
+      if (data) {
+        return JSON.parse(data);
+      }
+      return {
+        folders: [{ id: 'default', name: 'Default' }],
+        files: [],
+        currentFileId: null,
+        currentFolderId: 'default'
+      };
+    }
+
+    function saveData(data) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function loadData() {
+      const data = getData();
+      if (!data.folders.find(f => f.id === 'default')) {
+        data.folders.unshift({ id: 'default', name: 'Default' });
+        saveData(data);
+      }
+      if (!data.currentFolderId) {
+        data.currentFolderId = 'default';
+        saveData(data);
+      }
+    }
+
+    // ==================== BREADCRUMB ====================
+    function updateBreadcrumb() {
+      const data = getData();
+      const folder = data.folders.find(f => f.id === data.currentFolderId);
+      const folderName = folder ? folder.name : 'Default';
+      const file = data.files.find(f => f.id === data.currentFileId);
+      const fileName = file ? file.title : '';
+      
+      // Make breadcrumb navigable
+      let breadcrumb = '<span class="breadcrumb-item" onclick="goHome()">HOME</span>';
+      breadcrumb += ' > ';
+      breadcrumb += '<span class="breadcrumb-item" onclick="goToFolder(\'' + data.currentFolderId + '\')">' + folderName + '</span>';
+      
+      if (fileName) {
+        breadcrumb += ' > ';
+        breadcrumb += '<span class="breadcrumb-item">' + fileName + '</span>';
+      }
+      document.getElementById('breadcrumb').innerHTML = breadcrumb;
+    }
+
+    function goHome() {
+      const data = getData();
+      data.currentFolderId = 'default';
+      data.currentFileId = null;
+      saveData(data);
+      renderFolders();
+      renderFiles();
+      updateBreadcrumb();
+      clearEditor();
+    }
+
+    function goToFolder(folderId) {
+      const data = getData();
+      data.currentFolderId = folderId;
+      data.currentFileId = null;
+      saveData(data);
+      renderFolders();
+      renderFiles();
+      updateBreadcrumb();
+      clearEditor();
+    }
+
+    // ==================== INITIALIZATION ====================
+    function init() {
+      loadData();
+      loadTheme();
+      renderFolders();
+      renderFiles();
+      updateBreadcrumb();
+      
+      if (getCurrentFile()) {
+        loadFileIntoEditor(getCurrentFile());
+      }
+    }
+
+    // ==================== FOLDER OPERATIONS ====================
+    function renderFolders() {
+      const data = getData();
+      const list = document.getElementById('folder-list');
+      list.innerHTML = data.folders.map(folder => 
+        `<li data-id="${folder.id}" class="${folder.id === data.currentFolderId ? 'active' : ''}">[${folder.name}]</li>`
+      ).join('');
+      
+      list.querySelectorAll('li').forEach(li => {
+        li.onclick = () => selectFolder(li.dataset.id);
+      });
+    }
+
+    function createFolder() {
+      const input = document.getElementById('new-folder-name');
+      const name = input.value.trim();
+      
+      if (!name) return;
+      
+      const data = getData();
+      const id = 'folder_' + Date.now();
+      
+      data.folders.push({ id, name });
+      saveData(data);
+      
+      input.value = '';
+      renderFolders();
+    }
+
+    function selectFolder(folderId) {
+      const data = getData();
+      data.currentFolderId = folderId;
+      data.currentFileId = null;
+      saveData(data);
+      
+      renderFolders();
+      renderFiles();
+      updateBreadcrumb();
+      clearEditor();
+    }
+
+    // ==================== FILE OPERATIONS ====================
+    function renderFiles() {
+      const data = getData();
+      const list = document.getElementById('file-list');
+      
+      const files = data.files.filter(f => f.folderId === data.currentFolderId);
+      
+      list.innerHTML = files.map(file => `
+        <li data-id="${file.id}" class="${file.id === data.currentFileId ? 'active' : ''}">
+          [${file.title}]
+          <span class="delete-btn" onclick="event.stopPropagation(); deleteFile('${file.id}')">X</span>
+        </li>
+      `).join('');
+      
+      list.querySelectorAll('li').forEach(li => {
+        li.onclick = () => openFile(li.dataset.id);
+      });
+    }
+
+    function createFile() {
+      const input = document.getElementById('new-file-name');
+      const name = input.value.trim() || 'Untitled';
+      
+      const data = getData();
+      const id = 'file_' + Date.now();
+      
+      data.files.push({
+        id,
+        folderId: data.currentFolderId,
+        title: name,
+        content: '',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
+      
+      data.currentFileId = id;
+      saveData(data);
+      
+      input.value = '';
+      renderFiles();
+      updateBreadcrumb();
+      loadFileIntoEditor(data.files.find(f => f.id === id));
+    }
+
+    function openFile(fileId) {
+      const data = getData();
+      data.currentFileId = fileId;
+      saveData(data);
+      
+      renderFiles();
+      updateBreadcrumb();
+      loadFileIntoEditor(data.files.find(f => f.id === fileId));
+    }
+
+    function deleteFile(fileId) {
+      if (!confirm('Delete this file?')) return;
+      
+      const data = getData();
+      data.files = data.files.filter(f => f.id !== fileId);
+      
+      if (data.currentFileId === fileId) {
+        data.currentFileId = null;
+      }
+      
+      saveData(data);
+      renderFiles();
+      updateBreadcrumb();
+      clearEditor();
+    }
+
+    function getCurrentFile() {
+      const data = getData();
+      return data.files.find(f => f.id === data.currentFileId);
+    }
+
+    function loadFileIntoEditor(file) {
+      if (!file) {
+        clearEditor();
+        return;
+      }
+      
+      document.getElementById('note-title').value = file.title;
+      document.getElementById('editor').innerHTML = file.content || '';
+      updateCharCount();
+      setStatus('FILE LOADED: ' + file.title);
+    }
+
+    function clearEditor() {
+      document.getElementById('note-title').value = 'Untitled';
+      document.getElementById('editor').innerHTML = '';
+      updateCharCount();
+      setStatus('NEW FILE');
+    }
+
+    // ==================== EDITOR OPERATIONS ====================
+    function formatText(format) {
+      const editor = document.getElementById('editor');
+      
+      switch(format) {
+        case 'bold':
+          document.execCommand('bold', false, null);
+          break;
+        case 'italic':
+          document.execCommand('italic', false, null);
+          break;
+        case 'strike':
+          document.execCommand('strikeThrough', false, null);
+          break;
+        case 'underline':
+          const selection = window.getSelection();
+          if (selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            if (range.toString().length > 0) {
+              const span = document.createElement('span');
+              span.className = 'underline-dotted';
+              span.textContent = range.toString();
+              range.deleteContents();
+              range.insertNode(span);
+            }
+          }
+          break;
+      }
+      
+      editor.focus();
+      onEditorChange();
+    }
+
+    function onEditorChange() {
+      updateCharCount();
+    }
+
+    function updateCharCount() {
+      const content = document.getElementById('editor').innerText || '';
+      document.getElementById('char-count').textContent = content.length + ' chars';
+    }
+
+    function saveNote() {
+      const data = getData();
+      const title = document.getElementById('note-title').value || 'Untitled';
+      const content = document.getElementById('editor').innerHTML;
+      
+      if (!data.currentFileId) {
+        const id = 'file_' + Date.now();
+        data.files.push({
+          id,
+          folderId: data.currentFolderId,
+          title,
+          content,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        });
+        data.currentFileId = id;
+      } else {
+        const file = data.files.find(f => f.id === data.currentFileId);
+        if (file) {
+          file.title = title;
+          file.content = content;
+          file.updatedAt = new Date().toISOString();
+        }
+      }
+      
+      saveData(data);
+      renderFiles();
+      updateBreadcrumb();
+      
+      const now = new Date().toLocaleTimeString();
+      document.getElementById('last-saved').textContent = 'SAVED: ' + now;
+      setStatus('SAVED: ' + title);
+    }
+
+    function deleteNote() {
+      if (!getCurrentFile()) return;
+      if (!confirm('Delete current note?')) return;
+      
+      deleteFile(getCurrentFile().id);
+    }
+
+    function newNote() {
+      const data = getData();
+      const id = 'file_' + Date.now();
+      
+      data.files.push({
+        id,
+        folderId: data.currentFolderId,
+        title: 'Untitled',
+        content: '',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
+      
+      data.currentFileId = id;
+      saveData(data);
+      
+      renderFiles();
+      updateBreadcrumb();
+      loadFileIntoEditor(data.files.find(f => f.id === id));
+    }
+
+    // ==================== SHARE OPERATIONS ====================
+    async function showShareModal() {
+      saveNote();
+      
+      const file = getCurrentFile();
+      if (!file) {
+        alert('Create or open a note first!');
+        return;
+      }
+      
+      const content = document.getElementById('editor').innerText;
+      
+      try {
+        const response = await fetch('/api/notes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: file.title,
+            content: content
+          })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          const baseUrl = window.location.origin;
+          document.getElementById('share-url').value = baseUrl + result.shareUrl;
+          document.getElementById('api-url').value = baseUrl + result.apiUrl;
+          document.getElementById('share-modal').classList.add('show');
+        } else {
+          alert('Error sharing note: ' + result.error);
+        }
+      } catch (e) {
+        alert('Error connecting to server');
+        console.error(e);
+      }
+    }
+
+    function closeShareModal() {
+      document.getElementById('share-modal').classList.remove('show');
+    }
+
+    function copyShareUrl() {
+      const url = document.getElementById('share-url').value;
+      navigator.clipboard.writeText(url).then(() => {
+        alert('URL copied to clipboard!');
+      });
+    }
+
+    // ==================== UI HELPERS ====================
+    function showSection(section) {
+      document.getElementById('files-section').style.display = section === 'files' ? 'flex' : 'none';
+      document.getElementById('help-section').style.display = section === 'help' ? 'block' : 'none';
+    }
+
+    function setStatus(msg) {
+      document.getElementById('status').textContent = msg;
+    }
+
+    // ==================== KEYBOARD SHORTCUTS ====================
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === 'b') {
+        e.preventDefault();
+        formatText('bold');
+      }
+      if (e.ctrlKey && e.key === 'i') {
+        e.preventDefault();
+        formatText('italic');
+      }
+      if (e.ctrlKey && e.key === 's') {
+        e.preventDefault();
+        saveNote();
+      }
+    });
+
+    // Initialize on load
+    window.onload = init;
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "brutalist-notepad",
+  "version": "1.0.0",
+  "description": "A brutalist notepad app with local storage and sharing",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
