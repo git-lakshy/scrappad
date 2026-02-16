@@ -1,8 +1,5 @@
 A simple, minimalist notepad for creating and organizing your notes. Save notes locally, organize them into folders, and share them with others.
 
-## Getting Started
-
-Open the app in your browser. Your notes are automatically saved to your browser and will be there when you return.
 
 ## Creating Notes
 
@@ -53,3 +50,4 @@ Your theme choice is saved and remembered.
 ## Help
 
 Click **[HELP]** at the top to see this guide anytime.
+
